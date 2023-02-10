@@ -1,0 +1,8 @@
+gray : #E8E8E8
+red: #F05454
+navy: #30475E
+black: #222831
+dark black: #4f4a4a
+
+red: #F92727
+
