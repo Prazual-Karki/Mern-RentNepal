@@ -20,6 +20,7 @@ const userSignUp = async (request, response) => {
         password: request.body.password,
         address: request.body.address,
         phone: request.body.phone,
+        gender: request.body.gender,
         photo: request.file.path,
         // photo: {
         //   name: request.file.path,
@@ -35,7 +36,8 @@ const userSignUp = async (request, response) => {
         !user.password ||
         !user.address ||
         !user.phone ||
-        !user.photo
+        !user.photo ||
+        !user.gender
       ) {
         return response.status(401).json('please fill out the empty field')
       } else {
@@ -51,7 +53,7 @@ const userSignUp = async (request, response) => {
               }
 
               //generate jsonwebtoken for authentication
-              Jwt.sign(payload, jwtKey, { expiresIn: '2h' }, (err, token) => {
+              Jwt.sign(payload, jwtKey, (err, token) => {
                 if (err) {
                   response
                     .status(401)
@@ -68,7 +70,7 @@ const userSignUp = async (request, response) => {
       }
     }
   } catch (error) {
-    console.log({ message: error.message })
+    return response.status(400).json(error)
   }
 }
 
@@ -87,7 +89,7 @@ const userLogIn = async (request, response) => {
               id: user.id,
               email: user.email,
             }
-            Jwt.sign(payload, jwtKey, { expiresIn: '2h' }, (err, token) => {
+            Jwt.sign(payload, jwtKey, (err, token) => {
               if (err) {
                 response
                   .status(500)
@@ -109,7 +111,7 @@ const userLogIn = async (request, response) => {
       return response.status(400).json('email and password required')
     }
   } catch (error) {
-    console.log('Error: ', error.message)
+    return response.status(400).json(error)
   }
 }
 
@@ -129,7 +131,7 @@ const updateUserProfile = async (request, response) => {
     ).select('-password')
     response.status(200).json(updatedUser)
   } catch (error) {
-    console.log('Error:', error.message)
+    return response.status(400).json(error)
   }
 }
 
@@ -146,7 +148,7 @@ const getUserDetails = async (request, response) => {
       return response.status(404).json('User not found')
     }
   } catch (error) {
-    console.log('error: ', error.message)
+    return response.status(400).json(error)
   }
 }
 

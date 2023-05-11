@@ -7,13 +7,14 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import noPhoto from '../Product/photos/noPhoto.jpg'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 
 export default function MultiActionAreaCard(props) {
   var photoName = props.data.photo.replace('public\\', '')
   photoName = `http://localhost:8080/${photoName}`
 
   return (
-    <Grid item xs={6} sm={6} md={3}>
+    <Grid item xs={6} sm={6} md={4}>
       <Card>
         <CardActionArea>
           <img
@@ -23,7 +24,7 @@ export default function MultiActionAreaCard(props) {
             alt='shoes'
           />
 
-          <CardContent component='div' sx={{ pb: '2%', pl: '10%' }}>
+          <CardContent component='div' sx={{ pb: '2%', pl: '5%' }}>
             <Typography
               variant='caption'
               color='gray'
@@ -32,20 +33,29 @@ export default function MultiActionAreaCard(props) {
               <LocationOnIcon fontSize='small' />
               &nbsp;{props.data.location}
             </Typography>
-            <Typography variant='h6' fontSize='xxLarge' component='div' mt={1}>
+            <Typography
+              variant='body1'
+              component='div'
+              sx={{ fontSize: 17 }}
+              gutterBottom
+            >
               {props.data.name.toUpperCase()}
             </Typography>
-            <Typography variant='body2' component='div'>
-              {props.data.type}
+
+            <Typography
+              variant='caption'
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <FavoriteIcon fontSize='small' color='error' />
+              &nbsp;{props.data.likes.length} people liked this
             </Typography>
-            {/* <Typography variant='body2'>Rent price: N/A</Typography>
-            <Typography variant='body2'>Size: N/A</Typography> */}
           </CardContent>
         </CardActionArea>
+
         <CardActions>
           <Link
-            to='/user/shoeInfo'
-            style={{ textDecoration: 'none', marginLeft: '5%' }}
+            to={`/user/shoeInfo/${props.data._id}`}
+            style={{ textDecoration: 'none', marginLeft: '3%' }}
           >
             <Button size='small' color='primary'>
               See more

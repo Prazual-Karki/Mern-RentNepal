@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import { Alert } from '@mui/material'
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function ValidationTextFields() {
   const navigate = useNavigate()
-  const [sameShoe, setsameShoe] = useState('')
+  const [sameProduct, setsameProduct] = useState('')
   const [productInfo, setproductInfo] = useState({
     productName: '',
     type: '',
@@ -28,6 +28,7 @@ export default function ValidationTextFields() {
     price: '',
     location: '',
     status: 'available',
+    description: '',
     photo: null,
   })
 
@@ -41,6 +42,9 @@ export default function ValidationTextFields() {
       ...productInfo,
       [name]: value,
     })
+    if (name.length > 1) {
+      setformErrors({ name: null })
+    }
 
     // var src = URL.createObjectURL(event.target.files[0]);
     // imgRef.current.src = src;
@@ -62,6 +66,7 @@ export default function ValidationTextFields() {
           formData.append('location', productInfo.location)
           formData.append('photo', productInfo.photo)
           formData.append('status', productInfo.status)
+          formData.append('description', productInfo.description)
 
           const response = await axios.post(
             'http://localhost:8080/addProduct',
@@ -78,7 +83,7 @@ export default function ValidationTextFields() {
             navigate('/user/dashboard/' + userId)
           }
           if (response.status === 200) {
-            setsameShoe(response.data)
+            setsameProduct(response.data)
           }
         }
       } catch (error) {
@@ -86,12 +91,6 @@ export default function ValidationTextFields() {
       }
     }
   }
-  // useEffect(() => {
-  //   if (Object.keys(formErrors).length === 0 && isSubmit) {
-  //     console.log(productInfo)
-  //     alert('upload item succesfully')
-  //   }
-  // }, [formErrors])
 
   const validateForm = (values) => {
     const errors = {}
@@ -125,8 +124,8 @@ export default function ValidationTextFields() {
         '& .MuiTextField-root': { m: 1, width: '30ch' },
 
         backgroundColor: '#f0ebec',
-        padding: '2% 1%',
-        width: '90%',
+        padding: '2% 2%',
+        width: '95%',
         boxShadow: '0 2px 4px 0 rgba(0,0,0,0.2) ',
         margin: 'auto',
         marginTop: '1%',
@@ -136,11 +135,11 @@ export default function ValidationTextFields() {
       autoComplete='off'
     >
       <Typography variant='h5' align='center'>
-        Upload shoes
+        Upload Product
       </Typography>
       <hr />
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={5}>
           <img
             src={
               productInfo.photo
@@ -152,8 +151,28 @@ export default function ValidationTextFields() {
             width='400px'
             style={{ marginTop: '20px' }}
           />
+          <div>
+            <Button component='label' startIcon={<AddAPhotoIcon />}>
+              <input
+                hidden
+                accept='image/png, image/jpeg, image/jpg'
+                type='file'
+                name='photo'
+                onChange={(e) =>
+                  setproductInfo({ ...productInfo, photo: e.target.files[0] })
+                }
+              />
+              upload photo
+            </Button>
+            &nbsp;
+            {!!productInfo.photo ? (
+              ''
+            ) : (
+              <p style={{ color: 'red' }}>{formErrors.photo}</p>
+            )}
+          </div>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={7}>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6}>
               <TextField
@@ -162,7 +181,7 @@ export default function ValidationTextFields() {
                 helperText={
                   formErrors.productName ? formErrors.productName : ''
                 }
-                label='name of shoe'
+                label='name of product'
                 name='productName'
                 variant='standard'
                 onChange={handleChange}
@@ -171,7 +190,7 @@ export default function ValidationTextFields() {
             <Grid item xs={12} md={6}>
               <FormControl variant='standard' sx={{ m: 1, width: '30ch' }}>
                 <InputLabel id='demo-simple-select-standard-label'>
-                  choose shoe type
+                  choose product type
                 </InputLabel>
                 <Select
                   labelId='demo-simple-select-standard-label'
@@ -181,11 +200,13 @@ export default function ValidationTextFields() {
                   onChange={handleChange}
                   label='Type'
                 >
-                  <MenuItem value='sports'>Sports</MenuItem>
-                  <MenuItem value='trekking'>Trekking</MenuItem>
-                  <MenuItem value='sneakers'>Sneakers</MenuItem>
-                  <MenuItem value='formal'>Formal</MenuItem>
-                  <MenuItem value='heel'>Heel</MenuItem>
+                  <MenuItem value='trekking'>Trekking items</MenuItem>
+                  <MenuItem value='watch'>Watches</MenuItem>
+                  <MenuItem value='coats'>Coats/blazers</MenuItem>
+                  <MenuItem value='carryBags'>Carry bags</MenuItem>
+                  <MenuItem value='ladiesItem'>saree/heels/bags</MenuItem>
+                  <MenuItem value='music'>musical items</MenuItem>
+                  <MenuItem value='biCycle'>Bi-Cycle</MenuItem>
                 </Select>
                 <FormHelperText>
                   <Typography color='error' variant='caption' component='span'>
@@ -200,9 +221,7 @@ export default function ValidationTextFields() {
                 error={!!formErrors.size}
                 value={productInfo.size}
                 helperText={formErrors.size ? formErrors.size : ''}
-                type='number'
-                id='registerPhone'
-                label='shoe size'
+                label='product size or length'
                 name='size'
                 variant='standard'
                 onChange={handleChange}
@@ -232,25 +251,24 @@ export default function ValidationTextFields() {
                 onChange={handleChange}
               />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                id='outlined-multiline-static'
+                label='add a description for the product '
+                variant='standard'
+                value={productInfo.description}
+                name='description'
+                multiline
+                maxRows={5}
+                inputProps={{ maxLength: 300 }}
+                onChange={handleChange}
+              />
+            </Grid>
           </Grid>
 
           <br />
-          <div>
-            <Button component='label' startIcon={<AddAPhotoIcon />}>
-              <input
-                hidden
-                accept='image/*'
-                type='file'
-                name='photo'
-                onChange={(e) =>
-                  setproductInfo({ ...productInfo, photo: e.target.files[0] })
-                }
-              />
-              upload photo
-            </Button>
-            {!!productInfo.photo ? productInfo.photo.name : formErrors.photo}
-          </div>
-          {sameShoe ? (
+
+          {sameProduct ? (
             <Alert
               severity='warning'
               variant='outlined'
@@ -260,7 +278,7 @@ export default function ValidationTextFields() {
                 margin: 'auto',
               }}
             >
-              {sameShoe}!
+              {sameProduct}!
             </Alert>
           ) : (
             ''

@@ -1,0 +1,61 @@
+const RentalProducts = require('../models/rentalDetailsSchema')
+const Product = require('../models/productSchema')
+
+const getRecommendedProducts = async (request, response) => {
+  try {
+    // Define the user's rental history
+    const UID = request.params.id
+    if (UID) {
+      const userRentalProducts = await RentalProducts.find({
+        userId: UID,
+      })
+      const availableProducts = await Product.find()
+
+      // Define a function to calculate the similarity score between two items
+      function calculateSimilarity(item1, item2) {
+        // Calculate the similarity score based on shared attributes
+        const sharedAttributes = ['type', 'price', 'location']
+        let similarity = 0
+        sharedAttributes.forEach((attribute) => {
+          if (item1[attribute] === item2[attribute]) {
+            similarity++
+          }
+        })
+        return similarity
+      }
+
+      // Define a function to recommend items to the user based on their rental history
+      function recommendItems(userRentalProducts, availableProducts) {
+        const recommendedItems = []
+        availableProducts.forEach((item) => {
+          let similarityScore = 0
+          userRentalProducts.forEach((rental) => {
+            similarityScore += calculateSimilarity(item, rental)
+          })
+          // Add the item to the recommended list if it has a high similarity score
+          if (similarityScore > 1) {
+            recommendedItems.push(item)
+          }
+        })
+        return recommendedItems
+      }
+
+      const Items = recommendItems(userRentalProducts, availableProducts)
+      const recommendedItems = Items.filter((products) => {
+        return products.userId !== UID
+      })
+
+      if (recommendedItems.length > 0) {
+        return response.status(200).json(recommendedItems)
+      } else {
+        return response.status(200).json(availableProducts)
+      }
+    } else {
+      return response.status(400).json(error)
+    }
+  } catch (error) {
+    return response.status(400).json({ error: error })
+  }
+}
+
+module.exports = { getRecommendedProducts }

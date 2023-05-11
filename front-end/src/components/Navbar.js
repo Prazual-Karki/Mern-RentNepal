@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 function Navbar() {
   const auth = localStorage.getItem('users')
+  const adminAuth = localStorage.getItem('admin')
 
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
@@ -117,7 +118,7 @@ function Navbar() {
               {/* on mobile view */}
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to='/productList' style={linkStyleM}>
-                  <Typography textAlign='center'>Browse shoes</Typography>
+                  <Typography textAlign='center'>Browse Products</Typography>
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
@@ -149,7 +150,7 @@ function Navbar() {
             {/* desktop view */}
             <Link to='/productList' style={linkStyle}>
               <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                Browse shoes
+                Browse Products
               </Button>
             </Link>
             <Link to='/working' style={linkStyle}>
@@ -158,72 +159,83 @@ function Navbar() {
               </Button>
             </Link>
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            {auth ? (
-              <>
-                <Box sx={{ flexGrow: 0 }}>
-                  <Tooltip title='Open profile'>
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar
-                        alt={JSON.parse(auth).firstname.toUpperCase()}
-                        src='null'
-                      />
-                    </IconButton>
-                  </Tooltip>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id='menu-appbar'
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                  >
-                    <Link
-                      to={'/user/profile/' + JSON.parse(auth)._id}
-                      style={{ color: 'black', textDecoration: 'none' }}
-                    >
-                      <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography textAlign='center'>Profile</Typography>
-                      </MenuItem>
-                    </Link>
-                    <Link
-                      to={'/user/dashboard/' + JSON.parse(auth)._id}
-                      style={{ color: 'black', textDecoration: 'none' }}
-                    >
-                      <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography textAlign='center'>Dashboard</Typography>
-                      </MenuItem>
-                    </Link>
-                    <MenuItem
-                      onClick={() => {
-                        setAnchorElUser(null)
-
-                        localStorage.clear()
-                        navigate('/register')
+          {adminAuth ? (
+            <Button
+              sx={{ color: 'white' }}
+              onClick={() => {
+                localStorage.clear()
+                navigate('/')
+              }}
+            >
+              LogOut(A)
+            </Button>
+          ) : (
+            <Box sx={{ flexGrow: 0 }}>
+              {auth ? (
+                <>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title='Open profile'>
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar
+                          alt={JSON.parse(auth).firstname.toUpperCase()}
+                          src='null'
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id='menu-appbar'
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
                       }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
                     >
-                      <Typography textAlign='center'>Log out</Typography>
-                    </MenuItem>
-                  </Menu>
-                </Box>
-              </>
-            ) : (
-              <Link to='/register' style={linkStyle}>
-                <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                  Login
-                </Button>
-              </Link>
-            )}
-          </Box>
+                      <Link
+                        to={'/user/profile/' + JSON.parse(auth)._id}
+                        style={{ color: 'black', textDecoration: 'none' }}
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <Typography textAlign='center'>Profile</Typography>
+                        </MenuItem>
+                      </Link>
+                      <Link
+                        to={'/user/dashboard/' + JSON.parse(auth)._id}
+                        style={{ color: 'black', textDecoration: 'none' }}
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          <Typography textAlign='center'>Dashboard</Typography>
+                        </MenuItem>
+                      </Link>
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorElUser(null)
+
+                          localStorage.clear()
+                          navigate('/login')
+                        }}
+                      >
+                        <Typography textAlign='center'>Log out</Typography>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                </>
+              ) : (
+                <Link to='/login' style={linkStyle}>
+                  <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Login
+                  </Button>
+                </Link>
+              )}
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

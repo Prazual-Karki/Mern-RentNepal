@@ -8,9 +8,9 @@ import TextField from '@mui/material/TextField'
 import { Button, IconButton, Typography, Alert } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
-export default function InputWithIcon() {
+export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false)
   const [email, setemail] = React.useState('')
   const [password, setpassword] = React.useState('')
@@ -62,7 +62,8 @@ export default function InputWithIcon() {
   }
   React.useEffect(() => {
     const auth = localStorage.getItem('users')
-    if (auth) {
+    const adminAuth = localStorage.getItem('admin')
+    if (auth || adminAuth) {
       navigate('/')
     }
     return () => {
@@ -76,28 +77,35 @@ export default function InputWithIcon() {
     <Box
       sx={{
         '& > :not(style)': { m: 1 },
-        backgroundColor: '#E8E8E8',
-        padding: '3% 0% 5% 0%',
-        width: '450px',
+        backgroundColor: '#f5f5f5',
+        padding: '3% 0% 1% 0%',
+        maxWidth: '450px',
+        width: '100%',
         boxShadow: '0 2px 4px 0 rgba(0,0,0,0.2) ',
         margin: 'auto',
         marginTop: '2%',
         textAlign: 'center',
-        marginBottom: '8%',
       }}
     >
       <Typography variant='h5' align='center'>
         SIGN IN
       </Typography>
-      <br />
+      <hr style={{ marginBottom: '3%' }} />
 
       <Box sx={{ alignItems: 'center' }}>
         <TextField
           sx={{ width: '35ch' }}
           id='input-with-sx'
           label='Email'
+          value={email}
+          name='email'
           variant='standard'
-          onChange={(e) => setemail(e.target.value)}
+          onChange={(e) => {
+            setemail(e.target.value)
+            if (e.target.value.length > 1) {
+              setformErrors({ email: null })
+            }
+          }}
         />
       </Box>
       <Typography variant='caption' color='error' component='h6'>
@@ -108,8 +116,15 @@ export default function InputWithIcon() {
 
         <Input
           // id='standard-adornment-password'
+          name='password'
+          value={password}
           type={showPassword ? 'text' : 'password'}
-          onChange={(e) => setpassword(e.target.value)}
+          onChange={(e) => {
+            setpassword(e.target.value)
+            if (e.target.value.length > 1) {
+              setformErrors({ password: null })
+            }
+          }}
           endAdornment={
             <InputAdornment position='end'>
               <IconButton
@@ -145,11 +160,21 @@ export default function InputWithIcon() {
       <Button
         variant='contained'
         color='error'
-        style={{ display: 'block', margin: 'auto', marginTop: '7%' }}
+        style={{
+          display: 'block',
+          margin: 'auto',
+          marginTop: '0%',
+          width: '36ch',
+        }}
         onClick={handleLogin}
       >
         Login
       </Button>
+      <Link to='/register'>
+        <Typography variant='body1' textAlign='center' mt={1}>
+          Don't have an account?
+        </Typography>
+      </Link>
     </Box>
   )
 }

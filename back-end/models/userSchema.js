@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  gender: {
+    type: String,
+    required: true,
+  },
   phone: {
     type: String,
     required: true,
@@ -28,6 +32,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     type: String,
   },
+  registeredAt: {
+    type: Date,
+    default: Date.now,
+  },
+
   // photo: {
   //   type: String,
   //   data: Buffer,

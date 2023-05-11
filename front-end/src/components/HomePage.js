@@ -1,10 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Carousel from 'react-bootstrap/Carousel'
+import Footer from './Footer'
 
-import formal from '../images/carouselImage/formal2.jpg'
-import sneakers from '../images/carouselImage/sneakers.jpg'
-import sports from '../images/carouselImage/sports.webp'
-import trekshoe from '../images/carouselImage/trekshoe1.jpg'
+import bags from '../images/carouselImage/bags.jpg'
+import coats from '../images/carouselImage/coats.jfif'
+import trek from '../images/carouselImage/trek.jpg'
+import guitar from '../images/carouselImage/guitar.jpg'
+
 import wedding from '../images/carouselImage/wedding.jpg'
 
 import Typography from '@mui/material/Typography'
@@ -23,59 +25,60 @@ function IndividualIntervalsExample() {
   }
   return (
     <>
-      <Carousel style={{ marginTop: '1px' }}>
+      <Carousel style={{ marginTop: '2px' }}>
         <Carousel.Item interval={5000}>
           <img
             className='d-block w-100'
-            src={formal}
-            alt='Formal shoes'
-            height='450px'
+            src={coats}
+            alt='coats'
+            height='470px'
           />
           <Carousel.Caption>
             <h2>Join our community of Rent-Nepal</h2>
-            <h5>Rent & lend your shoes now...</h5>
+            <h5>Rent & lend your products now...</h5>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item interval={5000}>
+        <Carousel.Item interval={3000}>
+          <img className='d-block w-100' src={trek} alt='trek' height='470px' />
+          <Carousel.Caption>
+            <Typography variant='h5'>want some for trekking ?</Typography>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item interval={3000}>
           <img
             className='d-block w-100'
-            src={sneakers}
-            alt='Sneakers'
-            height='450px'
+            src={bags}
+            alt='sports shoes'
+            height='470px'
           />
         </Carousel.Item>
-        <Carousel.Item interval={5000}>
+        <Carousel.Item interval={3000}>
           <img
             className='d-block w-100'
-            src={sports}
-            alt='sports shoes'
-            height='450px'
+            src={guitar}
+            alt='guitar'
+            height='470px'
           />
           <Carousel.Caption>
-            <h3>Wanna try sports ?</h3>
+            <Typography variant='h5'>wanna play some music ?</Typography>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item interval={5000}>
-          <img
-            className='d-block w-100'
-            src={trekshoe}
-            alt='Trekking shoes'
-            height='450px'
-          />
-        </Carousel.Item>
       </Carousel>
-      <Box sx={{ flexGrow: 1, marginTop: '4%', marginBottom: '1%' }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          marginTop: '4%',
+          marginBottom: '1%',
+        }}
+      >
         <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <img height='420' width='100%' alt='wedding pic' src={wedding} />
+          <Grid item xs={8} padding='4%'>
+            <img height='350' width='100%' alt='wedding pic' src={wedding} />
           </Grid>
           <Grid item sx={{ padding: '5%' }} xs={4}>
-            <Typography variant='h4'>LET'S PARTY</Typography>
-            <br />
-            <Typography variant='body1'>
-              Our Favorite season for shoes is here and we are ready!
+            <Typography variant='h4' mt='10%'>
+              Don't buy , just rent them
             </Typography>
-            <br />
             <br />
 
             <Link to='/productList' style={{ textDecoration: 'none' }}>
@@ -92,7 +95,7 @@ function IndividualIntervalsExample() {
         </Typography>
         <Typography variant='body2' textAlign='center'>
           From earning money to saving the planet, all whilst having fun getting
-          dressed,
+          dressed and some enjoyment,
           <br />
           there are so many reasons to join the rental revolution.
         </Typography>
@@ -103,7 +106,7 @@ function IndividualIntervalsExample() {
               EARN MONEY
             </Typography>
             <Typography variant='body2'>
-              Let your wardrobe work for you and put cash in your pockets.
+              Let your product work for you and put cash in your pockets.
             </Typography>
           </Grid>
           <Grid item xs={12} lg={4} md={4} style={gridStyle}>
@@ -128,6 +131,7 @@ function IndividualIntervalsExample() {
           </Grid>
         </Grid>
       </Box>
+      <Footer />
     </>
   )
 }

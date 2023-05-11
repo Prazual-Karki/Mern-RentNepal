@@ -20,10 +20,10 @@ export default function Types() {
       <Typography variant='h6'>About us:</Typography>
       <Typography variant='body2' gutterBottom>
         RentNepal is an online platform that allows users to register and login
-        to upload information about their shoes and rent them to others, as well
-        as rent shoes from others that have been uploaded to the website.
-        Transactions and payments are completed offline. By using the RentNepal
-        website, you agree to be bound by these terms of service.
+        to upload information about their products and rent them to others, as
+        well as rent products from others that have been uploaded to the
+        website. Transactions and payments are completed offline. By using the
+        RentNepal website, you agree to be bound by these terms of service.
       </Typography>
       <Typography variant='h6' mt={2}>
         User Account:
@@ -47,14 +47,15 @@ export default function Types() {
         upload.
       </Typography>
       <Typography variant='h6' mt={2}>
-        Renting Shoes:
+        Renting products:
       </Typography>
       <Typography variant='body2' gutterBottom>
-        Renting shoes through RentNepal is a transaction between the shoe owner
-        and the renter. RentNepal is not responsible for any disputes or issues
-        that may arise between the two parties. RentNepal is not responsible for
-        the condition of the shoes and it is the responsibility of the renter to
-        inspect the shoes before renting them.
+        Renting products through RentNepal is a transaction between the product
+        owner and the renter. RentNepal is not responsible for any disputes or
+        issues that may arise between the two parties. RentNepal is not
+        responsible for the condition of the products and it is the
+        responsibility of the renter to inspect the products before renting
+        them.
       </Typography>
       <Typography variant='h6' mt={2}>
         Limitation of Liability:

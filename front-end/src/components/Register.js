@@ -9,9 +9,16 @@ import {
   FormControlLabel,
   Typography,
   Alert,
+  Grid,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  FormControl,
 } from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import noPhoto from './Product/photos/noPhoto.jpg'
 
 export default function ValidationTextFields() {
   const navigate = useNavigate()
@@ -22,9 +29,9 @@ export default function ValidationTextFields() {
     password: '',
     address: '',
     phone: '',
+    gender: '',
     photo: null,
   })
-
   const [isSubmit, setisSubmit] = useState(false)
   const [isChecked, setisChecked] = useState(false)
   const [formErrors, setformErrors] = useState({})
@@ -37,6 +44,9 @@ export default function ValidationTextFields() {
       ...userDetails,
       [name]: value,
     })
+    if (name.length > 1) {
+      setformErrors({ name: null })
+    }
   }
 
   //   // var src = URL.createObjectURL(event.target.files[0]);
@@ -56,6 +66,7 @@ export default function ValidationTextFields() {
         formData.append('address', userDetails.address)
         formData.append('phone', userDetails.phone)
         formData.append('photo', userDetails.photo)
+        formData.append('gender', userDetails.gender)
 
         const response = await axios.post(
           'http://localhost:8080/signup',
@@ -78,7 +89,8 @@ export default function ValidationTextFields() {
   }
   useEffect(() => {
     const auth = localStorage.getItem('users')
-    if (auth) {
+    const adminAuth = localStorage.getItem('admin')
+    if (auth || adminAuth) {
       navigate('/')
     }
   }, [])
@@ -91,9 +103,12 @@ export default function ValidationTextFields() {
     if (!values.photo) {
       errors.photo = '*required'
     }
+    if (!values.gender) {
+      errors.gender = '*required'
+    }
 
-    if (values.phone.length !== 10) {
-      errors.phone = 'phone no. must be of 10 digits'
+    if (!/^(98|97)\d{8}$/.test(values.phone)) {
+      errors.phone = 'invalid phone no'
     }
     if (values.firstname.length < 1) {
       errors.firstname = '*required'
@@ -117,15 +132,15 @@ export default function ValidationTextFields() {
   return (
     <Box
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '30ch' },
+        '& .MuiTextField-root': { mx: 1, width: '30ch' },
 
-        backgroundColor: '#E8E8E8',
-        padding: '2% 1%',
-        width: '100%',
-        maxWidth: '600px',
+        backgroundColor: '#f0ebec',
+        padding: '2% 3%',
+        width: '95%',
         boxShadow: '0 2px 4px 0 rgba(0,0,0,0.2) ',
         margin: 'auto',
         marginTop: '1%',
+        textAlign: 'center',
       }}
       noValidate
       autoComplete='off'
@@ -133,156 +148,193 @@ export default function ValidationTextFields() {
       <Typography variant='h5' align='center' gutterBottom>
         REGISTER
       </Typography>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <TextField
-            error={!!formErrors.firstname}
-            value={userDetails.firstname}
-            helperText={formErrors.firstname ? formErrors.firstname : ''}
-            label='first name'
-            name='firstname'
-            variant='standard'
-            onChange={handleChange}
+      <hr style={{ margin: '0' }} />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={5}>
+          <img
+            height='300px'
+            width='400px'
+            src={
+              userDetails.photo
+                ? URL.createObjectURL(userDetails.photo)
+                : noPhoto
+            }
+            alt='rentNepal'
+            style={{ marginTop: '20px' }}
           />
-
-          <TextField
-            error={!!formErrors.lastname}
-            value={userDetails.lastname}
-            helperText={formErrors.lastname ? formErrors.lastname : ''}
-            label='last name'
-            name='lastname'
-            variant='standard'
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <TextField
-            error={!!formErrors.email}
-            value={userDetails.email}
-            label='email'
-            name='email'
-            type='email'
-            helperText={formErrors.email ? formErrors.email : ''}
-            variant='standard'
-            onChange={handleChange}
-          />
-
-          <TextField
-            error={!!formErrors.password}
-            value={userDetails.password}
-            label='password'
-            name='password'
-            type='password'
-            helperText={formErrors.password ? formErrors.password : ''}
-            variant='standard'
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <TextField
-            error={!!formErrors.address}
-            value={userDetails.address}
-            helperText={formErrors.address ? formErrors.address : ''}
-            label='address'
-            name='address'
-            variant='standard'
-            onChange={handleChange}
-          />
-
-          <TextField
-            error={!!formErrors.phone}
-            value={userDetails.phone}
-            label='phone no.'
-            id='registerPhone'
-            name='phone'
-            type='number'
-            helperText={formErrors.phone ? formErrors.phone : ''}
-            variant='standard'
-            onChange={handleChange}
-          />
-        </div>
-        <br />
-        <div>
-          <Button
-            variant='outlined'
-            component='label'
-            startIcon={<AddAPhotoIcon />}
-          >
-            <input
-              hidden
-              accept='image/*'
-              type='file'
-              onChange={(e) =>
-                setuserDetails({ ...userDetails, photo: e.target.files[0] })
-              }
-              // onChange={(e) => {
-              //   setuserDetails({ photo: e.target.value })
-              // }}
-            />
-            upload photo
-          </Button>
-          {!!userDetails.photo ? userDetails.photo.name : formErrors.photo}
-          {/* {true ? (
-          <div
-            style={{
-              position: "absolute",
-              display: "inline"
-            }}
-          >
-            <img
-              style={{ height: "40px", width: "40px", borderRadius: "25px" }}
-              src={URL.createObjectURL(userDetails.photo.files[0])}
-              alt="profile pic"
-            />
+          <div>
+            <Button
+              sx={{ my: '2%' }}
+              variant='outlined'
+              component='label'
+              startIcon={<AddAPhotoIcon />}
+            >
+              <input
+                hidden
+                accept='image/*'
+                type='file'
+                onChange={(e) =>
+                  setuserDetails({
+                    ...userDetails,
+                    photo: e.target.files[0],
+                  })
+                }
+              />
+              upload photo
+            </Button>
+            &nbsp;
+            {!!userDetails.photo ? (
+              ''
+            ) : (
+              <p style={{ color: 'red' }}>{formErrors.photo}</p>
+            )}
           </div>
-        ) : (
-          ""
-        )} */}
-        </div>
-        <br />
-        <FormControlLabel
-          control={<Checkbox />}
-          onChange={(e) => setisChecked(e.target.checked)}
-          label='I accept the Terms Of Service and Privacy Policy'
-        />
-        {!isChecked ? (
-          <p style={{ color: '#d32f2f', margin: '0%' }}>
-            {formErrors.checkbox}
-          </p>
-        ) : (
-          ''
-        )}
-        <br />{' '}
-        {serverAuthError ? (
-          <Alert
-            severity='warning'
-            variant='outlined'
-            sx={{
-              width: '70%',
-              justifyContent: 'center',
-              margin: 'auto',
-            }}
-          >
-            {serverAuthError}!
-          </Alert>
-        ) : (
-          ''
-        )}
-        <Button
-          variant='contained'
-          color='error'
-          sx={{ display: 'block', margin: 'auto', mt: 1 }}
-          type='submit'
-        >
-          Register
-        </Button>
-      </form>
-      <Link to='/login'>
-        <Typography variant='body2' textAlign='center' mt={1}>
-          already have an account?
-        </Typography>
-      </Link>
+        </Grid>
+        <Grid item xs={12} md={7} mt={2}>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  error={!!formErrors.firstname}
+                  value={userDetails.firstname}
+                  helperText={formErrors.firstname ? formErrors.firstname : ''}
+                  label='first name'
+                  name='firstname'
+                  variant='standard'
+                  onChange={handleChange}
+                  // onChange={(e) => {
+                  //   setuserDetails({
+                  //     ...userDetails,
+                  //     firstname: e.target.value,
+                  //   })
+                  // }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  error={!!formErrors.lastname}
+                  // error={}
+                  value={userDetails.lastname}
+                  helperText={formErrors.lastname ? formErrors.lastname : ''}
+                  label='last name'
+                  name='lastname'
+                  variant='standard'
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  // error={!!formErrors.email}
+                  error={!!formErrors.email}
+                  value={userDetails.email}
+                  label='email'
+                  name='email'
+                  type='email'
+                  helperText={formErrors.email ? formErrors.email : ''}
+                  variant='standard'
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {' '}
+                <TextField
+                  error={!!formErrors.password}
+                  value={userDetails.password}
+                  label='password'
+                  name='password'
+                  type='password'
+                  helperText={formErrors.password ? formErrors.password : ''}
+                  variant='standard'
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  error={!!formErrors.address}
+                  value={userDetails.address}
+                  helperText={formErrors.address ? formErrors.address : ''}
+                  label='address'
+                  name='address'
+                  variant='standard'
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  error={!!formErrors.phone}
+                  value={userDetails.phone}
+                  label='mobile no.'
+                  id='registerPhone'
+                  name='phone'
+                  type='number'
+                  helperText={formErrors.phone ? formErrors.phone : ''}
+                  variant='standard'
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl variant='standard' sx={{ m: 1, width: '30ch' }}>
+                  <InputLabel id='demo-simple-select-standard-label'>
+                    Gender
+                  </InputLabel>
+                  <Select
+                    labelId='demo-simple-select-standard-label'
+                    id='demo-simple-select-standard'
+                    name='gender'
+                    value={userDetails.gender}
+                    onChange={handleChange}
+                    label='Gender'
+                  >
+                    <MenuItem value='male'>Male</MenuItem>
+                    <MenuItem value='female'>Female</MenuItem>
+                    <MenuItem value='other'>Other</MenuItem>
+                  </Select>
+                  <FormHelperText sx={{ color: 'red' }}>
+                    {formErrors.gender}
+                  </FormHelperText>
+                </FormControl>
+              </Grid>
+            </Grid>
+            <br />
+            <FormControlLabel
+              control={<Checkbox />}
+              onChange={(e) => setisChecked(e.target.checked)}
+              label='I accept the Terms Of Service and Privacy Policy'
+            />
+            {!isChecked ? (
+              <p style={{ color: '#d32f2f', margin: '0%' }}>
+                {formErrors.checkbox}
+              </p>
+            ) : (
+              ''
+            )}
+            <br />{' '}
+            {serverAuthError ? (
+              <Alert
+                severity='warning'
+                variant='standard'
+                sx={{
+                  width: '70%',
+                  justifyContent: 'center',
+                  margin: 'auto',
+                }}
+              >
+                {serverAuthError}!
+              </Alert>
+            ) : (
+              ''
+            )}
+            <Button
+              variant='contained'
+              color='error'
+              sx={{ display: 'block', margin: 'auto' }}
+              type='submit'
+            >
+              Register
+            </Button>
+          </form>
+        </Grid>
+      </Grid>
     </Box>
   )
 }

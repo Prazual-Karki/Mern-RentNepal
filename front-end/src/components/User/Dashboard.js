@@ -54,12 +54,12 @@ export default function BoxSx() {
     >
       <Typography variant='h5'>DASHBOARD</Typography>
       <hr />
-      <Typography variant='overline' component='span' fontSize={18}>
-        welcome, prazual
+      <Typography variant='overline' component='div' fontSize={18}>
+        welcome, {JSON.parse(localStorage.getItem('users')).firstname}
       </Typography>
       <Link to='/user/addProduct' style={{ textDecoration: 'none' }}>
-        <Button variant='contained' color='error' sx={{ mt: 2, mb: 2, ml: 4 }}>
-          upload new shoes
+        <Button variant='contained' color='error' sx={{ mt: 2, mb: 2 }}>
+          upload new product
         </Button>
       </Link>
 
@@ -73,7 +73,7 @@ export default function BoxSx() {
               component='h6'
               fontSize={22}
             >
-              your Listed shoes
+              your Listed Products
             </Typography>
             <Grid container spacing={2} rowSpacing={3}>
               {products.map((item) => {
@@ -90,7 +90,7 @@ export default function BoxSx() {
             fontSize={22}
             textAlign='center'
           >
-            Oops! you haven't uploaded any shoes
+            Oops! you haven't uploaded any products
           </Typography>
         )}
       </Box>

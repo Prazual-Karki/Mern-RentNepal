@@ -1,15 +1,17 @@
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
-const Connection = async (username, password) => {
+const Connection = (username, password) => {
   const URL = `mongodb+srv://${username}:${password}@cluster0.ex1s9t0.mongodb.net/?retryWrites=true&w=majority`
-  try {
-    await mongoose.connect(URL)
 
-    console.log('Database Connected Succesfully')
-  } catch (error) {
-    console.log('Error: ', error.message)
-  }
+  mongoose
+    .connect(URL)
+    .then(() => {
+      console.log('database connected succesfully')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 module.exports = Connection

@@ -33,9 +33,10 @@ export default function FullWidthGrid() {
 
           <Typography variant='body2'>
             Rent-Nepal is a free online platform where you can rent and lend the
-            shoes in an easy way. Whether you're looking shoes for special
-            occasion or something for a night out, give your feet VIP treatment.
-            Whatever your style, rent or lend shoes here.
+            products in an easy way. Whether you're looking clothes, shoes or
+            bags for special occasion or something for a night out, give
+            yourself a VIP treatment. Whatever your style, rent or lend product
+            here.
           </Typography>
         </Grid>
 
