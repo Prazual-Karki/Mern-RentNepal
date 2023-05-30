@@ -1,0 +1,10 @@
+
+#registerPhone::-webkit-outer-spin-button,
+#registerPhone::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+Link{
+  text-decoration: none;
+  color:white
+}
