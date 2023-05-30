@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
   location: String,
   status: {
     type: String,
-    enum: ['available', 'taken'],
+    // enum: ['available', 'taken'],
   },
   description: String,
   photo: String,

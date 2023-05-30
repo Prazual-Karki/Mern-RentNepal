@@ -58,6 +58,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: 'userId',
+    numeric: false,
+    disablePadding: true,
+    label: 'Renter',
+  },
+
+  {
     id: 'name',
     numeric: false,
     disablePadding: true,
@@ -67,13 +74,13 @@ const headCells = [
     id: 'type',
     numeric: false,
     disablePadding: false,
-    label: 'Type',
+    label: 'Category',
   },
   {
     id: 'price',
     numeric: true,
     disablePadding: false,
-    label: 'Price',
+    label: 'Price/day',
   },
 
   {
@@ -82,17 +89,18 @@ const headCells = [
     disablePadding: false,
     label: 'Location',
   },
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: false,
-    label: 'Status',
-  },
+
   {
     id: 'likes',
     numeric: true,
     disablePadding: false,
     label: 'Likes got',
+  },
+  {
+    id: 'rentalDates',
+    numeric: true,
+    disablePadding: false,
+    label: 'Rental Dates',
   },
 ]
 
@@ -112,23 +120,13 @@ function EnhancedTableHead(props) {
   return (
     <TableHead sx={{ bgcolor: '#E8E8E8' }}>
       <TableRow>
-        <TableCell padding='checkbox'>
-          {/* <Checkbox
-            color='primary'
-            indeterminate={
-              numSelected.length > 0 && numSelected.length < rowCount
-            }
-            checked={rowCount > 0 && numSelected.length === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all users',
-            }}
-          /> */}
-        </TableCell>
+        {/* <TableCell padding='checkbox'>
+          
+        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align='left'
+            align='center'
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -163,32 +161,32 @@ EnhancedTableHead.propTypes = {
 function EnhancedTableToolbar(props) {
   const { numSelected } = props
 
-  const handleDelete = async (pIds) => {
-    await axios.delete(`${BASE_URL}/deleteProducts`, {
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `bearer ${localStorage.getItem('token')}`,
-      },
-      data: { ids: pIds },
-    })
-    numSelected.length = 0
-  }
+  //   const handleDelete = async (pIds) => {
+  //     await axios.delete('${BASE_URL}/deleteProducts', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         authorization: `bearer ${localStorage.getItem('token')}`,
+  //       },
+  //       data: { ids: pIds },
+  //     })
+  //     numSelected.length = 0
+  //   }
 
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected.length > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
+        // ...(numSelected.length > 0 && {
+        //   bgcolor: (theme) =>
+        //     alpha(
+        //       theme.palette.primary.main,
+        //       theme.palette.action.activatedOpacity
+        //     ),
+        // }),
       }}
     >
-      {numSelected.length > 0 ? (
+      {/* {numSelected.length > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
           color='inherit'
@@ -197,26 +195,15 @@ function EnhancedTableToolbar(props) {
         >
           {numSelected.length} products selected
         </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant='h6'
-          id='tableTitle'
-          component='div'
-        >
-          PRODUCTS
-        </Typography>
-      )}
-
-      {numSelected.length > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton onClick={() => handleDelete(numSelected)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        ''
-      )}
+      ) : ( */}
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant='h6'
+        id='tableTitle'
+        component='div'
+      >
+        RENTAL TRANSACTIONS
+      </Typography>
     </Toolbar>
   )
 }
@@ -249,25 +236,25 @@ export default function EnhancedTable() {
     setSelected([])
   }
 
-  const handleClick = (event, _id) => {
-    const selectedIndex = selected.indexOf(_id)
-    let newSelected = []
+  //   const handleClick = (event, _id) => {
+  //     const selectedIndex = selected.indexOf(_id)
+  //     let newSelected = []
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, _id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
-    }
+  //     if (selectedIndex === -1) {
+  //       newSelected = newSelected.concat(selected, _id)
+  //     } else if (selectedIndex === 0) {
+  //       newSelected = newSelected.concat(selected.slice(1))
+  //     } else if (selectedIndex === selected.length - 1) {
+  //       newSelected = newSelected.concat(selected.slice(0, -1))
+  //     } else if (selectedIndex > 0) {
+  //       newSelected = newSelected.concat(
+  //         selected.slice(0, selectedIndex),
+  //         selected.slice(selectedIndex + 1)
+  //       )
+  //     }
 
-    setSelected(newSelected)
-  }
+  //     setSelected(newSelected)
+  //   }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -295,7 +282,7 @@ export default function EnhancedTable() {
 
     axios
       .get(
-        `${BASE_URL}/getWholeProducts`,
+        `${BASE_URL}/getRentalDetails`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,
@@ -349,14 +336,14 @@ export default function EnhancedTable() {
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row._id)}
+                          //   onClick={(event) => handleClick(event, row._id)}
                           role='checkbox'
                           aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row._id}
                           selected={isItemSelected}
                         >
-                          <TableCell padding='checkbox'>
+                          {/* <TableCell padding='checkbox'>
                             <Checkbox
                               color='primary'
                               checked={isItemSelected}
@@ -364,6 +351,11 @@ export default function EnhancedTable() {
                                 'aria-labelledby': labelId,
                               }}
                             />
+                          </TableCell> */}
+                          <TableCell>
+                            {row.userId
+                              ? `${row.userId.firstname} ${row.userId.lastname}`
+                              : 'N/A'}
                           </TableCell>
                           <TableCell
                             component='th'
@@ -376,8 +368,8 @@ export default function EnhancedTable() {
                           <TableCell>{row.type}</TableCell>
                           <TableCell>{row.price}</TableCell>
                           <TableCell>{row.location}</TableCell>
-                          <TableCell>{row.status}</TableCell>
-                          <TableCell>{row.likes.length}</TableCell>
+                          <TableCell>{row.productLikes}</TableCell>
+                          <TableCell>{row.createdAt}</TableCell>
                         </TableRow>
                       )
                     })}
@@ -410,7 +402,7 @@ export default function EnhancedTable() {
         </>
       ) : (
         <Typography variant='button' textAlign='center'>
-          no products uploaded....
+          no rental transactions
         </Typography>
       )}
     </Box>

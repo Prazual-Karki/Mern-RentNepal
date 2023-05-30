@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import { useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../helper'
 
 export default function ValidationTextFields() {
   const navigate = useNavigate()
@@ -69,7 +70,7 @@ export default function ValidationTextFields() {
           formData.append('description', productInfo.description)
 
           const response = await axios.post(
-            'http://localhost:8080/addProduct',
+            `${BASE_URL}/addProduct`,
             formData,
             {
               headers: {

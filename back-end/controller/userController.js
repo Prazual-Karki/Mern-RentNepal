@@ -59,10 +59,13 @@ const userSignUp = async (request, response) => {
                     .status(401)
                     .json('something went wrong in authentictaion')
                 }
-                const { _id, firstname, email, photo } = user
+                const { _id, firstname, lastname, email, photo } = user
                 response
                   .status(200)
-                  .json({ user: { _id, firstname, email, photo }, auth: token })
+                  .json({
+                    user: { _id, firstname, lastname, email, photo },
+                    auth: token,
+                  })
               })
             })
           })
@@ -95,10 +98,13 @@ const userLogIn = async (request, response) => {
                   .status(500)
                   .json('something went wrong in token generation')
               }
-              const { _id, firstname, email, photo } = user
+              const { _id, firstname, lastname, email, photo } = user
               response
                 .status(200)
-                .json({ user: { _id, firstname, email, photo }, auth: token })
+                .json({
+                  user: { _id, firstname, lastname, email, photo },
+                  auth: token,
+                })
             })
           } else {
             return response.status(200).json('password incorrect')

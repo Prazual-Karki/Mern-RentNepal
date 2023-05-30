@@ -9,6 +9,7 @@ import { Button, IconButton, Typography, Alert } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
+import { BASE_URL } from './helper'
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false)
@@ -30,7 +31,7 @@ export default function Login() {
     setisSubmit(true)
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       try {
-        const response = await axios.post('http://localhost:8080/login', {
+        const response = await axios.post(`${BASE_URL}/login`, {
           email,
           password,
         })

@@ -5,6 +5,7 @@ import UserShoe from './UserShoe'
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { BASE_URL } from '../helper'
 
 export default function BoxSx() {
   const params = useParams()
@@ -15,7 +16,7 @@ export default function BoxSx() {
 
     axios
       .get(
-        `http://localhost:8080/getProductsByUserId/${params.id}`,
+        `${BASE_URL}/getProductsByUserId/${params.id}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,

@@ -9,7 +9,9 @@ const getRecommendedProducts = async (request, response) => {
       const matA = new Matrix([a])
       const matB = new Matrix([b])
 
+      //dotProduct = a vector * b vector
       const dotProduct = matA.mmul(matB.transpose()).get(0, 0)
+      //normA = ||a||
       const normA = matA.norm()
       const normB = matB.norm()
       const similarity = dotProduct / (normA * normB)
@@ -18,7 +20,7 @@ const getRecommendedProducts = async (request, response) => {
     }
     // Define the user's rental history
     const userId = request.params.id
-    const threshold = 0.5
+    const threshold = 1
     if (userId) {
       // Retrieve the user's rental history
       const rentalDetails = await RentalProducts.find({

@@ -16,9 +16,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import MuiAlert from '@mui/material/Alert'
 import { Snackbar } from '@mui/material'
 import MessageOwnerBox from './MessageOwner'
-import Review from './Review'
 import RecommendSection from '../User/RecommendSection'
 import UserProduct from '../User/UserProduct'
+import { BASE_URL } from '../helper'
 
 //for alert appeared when clicked on like icon buttton
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -46,7 +46,7 @@ export default function FullWidthGrid() {
   const handleLike = async () => {
     if (userId) {
       const response = await axios.post(
-        `http://localhost:8080/addLikes/${params.id}`,
+        `${BASE_URL}/addLikes/${params.id}`,
         { userId },
         {
           headers: {
@@ -100,7 +100,7 @@ export default function FullWidthGrid() {
 
     axios
       .get(
-        `http://localhost:8080/getProductDetailById/${params.id}`,
+        `${BASE_URL}/getProductDetailById/${params.id}`,
 
         {
           cancelToken: cancelToken.token,
@@ -112,13 +112,13 @@ export default function FullWidthGrid() {
         // console.log(userDetails)
         checkLikes(res.data.productDetails.likes)
         if (res.data.userDetails.photo) {
-          var photoUser = res.data.userDetails.photo.replace('public\\', '')
-          photoUser = `http://localhost:8080/${photoUser}`
+          var photoUser = res.data.userDetails.photo.replace('public/', '')
+          photoUser = `${BASE_URL}/${photoUser}`
           setprofilePic(photoUser)
         }
         if (res.data.productDetails.photo) {
-          var photoName = res.data.productDetails.photo.replace('public\\', '')
-          photoName = `http://localhost:8080/${photoName}`
+          var photoName = res.data.productDetails.photo.replace('public/', '')
+          photoName = `${BASE_URL}/${photoName}`
           setproductPhoto(photoName)
         }
         if (userId === res.data.userDetails._id) {
@@ -222,7 +222,7 @@ export default function FullWidthGrid() {
                   cursor: 'text',
                 }}
               >
-                {productInfo.status === 'available' ? 'available' : 'booked'}
+                {productInfo.status}
               </Button>
               {userId ? (
                 <>
@@ -332,7 +332,11 @@ export default function FullWidthGrid() {
         </Grid>
       </Grid>
       {/* recommendation for user */}
-      {userId ? <RecommendSection /> : <UserProduct data={userDetails} />}
+      {userId ? (
+        <RecommendSection shoeId={params.id} />
+      ) : (
+        <UserProduct data={userDetails} shoeId={params.id} />
+      )}
     </Box>
   )
 }

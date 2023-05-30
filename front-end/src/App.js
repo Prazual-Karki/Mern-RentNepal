@@ -28,6 +28,8 @@ import CoatBlazers from './components/Product/CoatBlazers'
 import WholeProducts from './components/Product/AllProducts'
 import CarryBags from './components/Product/CarryBags'
 import ScrollToTop from './ScrollToTop'
+import RentalDetails from './components/Admin/RentalDetails'
+import RentalHistory from './components/User/RentalHistory'
 
 function App() {
   return (
@@ -59,6 +61,7 @@ function App() {
               <Route path='/admin' element={<Overview />} />
               <Route path='/admin/allUsers' element={<AllUsers />} />
               <Route path='/admin/allProducts' element={<AllProducts />} />
+              <Route path='/admin/rentalDetails' element={<RentalDetails />} />
             </Route>
           </Route>
 
@@ -67,6 +70,7 @@ function App() {
             <Route path='/user/dashboard/:id' element={<Dashboard />} />
             <Route path='/user/updateProduct/:id' element={<UpdateProduct />} />
             <Route path='/user/addProduct' element={<AddProduct />} />
+            <Route path='/user/rentalHistory/:id' element={<RentalHistory />} />
           </Route>
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />

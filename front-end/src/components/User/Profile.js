@@ -9,6 +9,7 @@ import MuiAlert from '@mui/material/Alert'
 
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { BASE_URL } from '../helper'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
@@ -36,7 +37,7 @@ export default function ValidationTextFields() {
 
     axios
       .get(
-        `http://localhost:8080/getUserDetails/${params.id}`,
+        `${BASE_URL}/getUserDetails/${params.id}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,
@@ -49,8 +50,8 @@ export default function ValidationTextFields() {
       .then((res) => {
         setuserDetails(res.data)
         if (res.data.photo) {
-          var photoName = res.data.photo.replace('public\\', '')
-          photoName = `http://localhost:8080/${photoName}`
+          var photoName = res.data.photo.replace('public/', '')
+          photoName = `${BASE_URL}/${photoName}`
           setprofilePic(photoName)
         }
       })
@@ -98,7 +99,7 @@ export default function ValidationTextFields() {
         //   setprofilePic(URL.createObjectURL(uploadedFile))
         // }
         const response = await axios.patch(
-          'http://localhost:8080/updateUserProfile/' + params.id,
+          `${BASE_URL}/updateUserProfile/` + params.id,
           formData,
           {
             headers: {
@@ -224,7 +225,7 @@ export default function ValidationTextFields() {
             <Button component='label' startIcon={<AddAPhotoIcon />}>
               <input
                 hidden
-                accept='image/*'
+                accept='image/png, image/jpeg, image/jpg'
                 type='file'
                 onChange={(e) => {
                   setuploadedFile(e.target.files[0])

@@ -29,7 +29,7 @@ const sendEmailAndStoreRentalDetails = async (request, response) => {
         from: process.env.RENT_EMAIL,
         to: receiverEmail,
         subject: 'Rent-Nepal Booking',
-        text: `${user.firstname} ${user.lastname}(${user.phone}) has booked your ${product.type}, named as "${product.name}" for ${rentDays} days. Contact ${gender} for more details ....`,
+        text: `${user.firstname} ${user.lastname}(${user.phone}) has booked your ${product.name},of category "${product.type}" for ${rentDays} days. Contact ${gender} for more details ....`,
       }
       let info = await transporter.sendMail(mailOptions)
       console.log(`Email sent: ${info.messageId}`)
@@ -82,5 +82,41 @@ const changeProductStatus = async (request, response) => {
     // console.log(error)
   }
 }
+const getRentalHistoryOfSpecificUser = async (request, response) => {
+  try {
+    const rentalHistory = await Rental.find({
+      userId: request.params.id,
+    }).populate('productId')
+    const userHistory = []
+    for (let i = 0; i < rentalHistory.length; i++) {
+      const item = rentalHistory[i]
+      const ownerId = item.productId.userId
+      const owner = await User.findById({ _id: ownerId })
+      const ownerName = owner ? `${owner.firstname} ${owner.lastname}` : 'N/A'
 
-module.exports = { sendEmailAndStoreRentalDetails, changeProductStatus }
+      const data = {
+        ownerName: ownerName,
+        name: item.name,
+        price: item.price,
+        type: item.type,
+        location: item.location,
+        createdAt: item.createdAt,
+      }
+      userHistory.push(data)
+    }
+
+    if (userHistory.length > 0) {
+      return response.status(200).json(userHistory)
+    } else {
+      return response.status(400).json('no products found')
+    }
+  } catch (error) {
+    return response.status(400).json(error)
+  }
+}
+
+module.exports = {
+  sendEmailAndStoreRentalDetails,
+  changeProductStatus,
+  getRentalHistoryOfSpecificUser,
+}

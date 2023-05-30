@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, Outlet } from 'react-router-dom'
 
+import { BASE_URL } from '../helper'
+
 const Products = () => {
   const [products, setproducts] = useState([])
   const [value, setValue] = React.useState('one')
@@ -14,55 +16,6 @@ const Products = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
-  // var cancelToken
-
-  // useEffect(() => {
-  //   fetchData()
-
-  //   return () => {
-  //     if (cancelToken) {
-  //       cancelToken('Cleanup function called before request completion.')
-  //     }
-  //   }
-  // }, [])
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8080/getAllProducts', {
-  //       cancelToken: new axios.CancelToken((token) => (cancelToken = token)),
-  //     })
-  //     setproducts(response.data)
-  //   } catch (error) {
-  //     if (axios.isCancel(error)) {
-  //       console.log('fetch cancelled for cleanup of product.js')
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  // const cancelToken = axios.CancelToken.source()
-
-  //   getAllProducts()
-
-  //   return () => {
-  //     cancelToken.cancel()
-  //   }
-  // }, [])
-
-  // const getAllProducts = () => {
-  //   axios
-  //     .get('http://localhost:8080/getAllProducts', {
-  //       cancelToken: cancelToken.token,
-  //     })
-  //     .then((res) => {
-  //       console.log('fetched products')
-  //       setproducts(res.data)
-  //     })
-  //     .catch((error) => {
-  //       if (axios.isCancel(error)) {
-  //         console.log('fetch cancelled for cleanup of dashboard.js')
-  //       }
-  //     })
-  // }
 
   const handleSearch = async (e) => {
     setisSearched(true)
@@ -70,7 +23,7 @@ const Products = () => {
     let key = e.target.value
     if (key) {
       const searchproducts = await axios.get(
-        `http://localhost:8080/searchProducts/${key}`
+        `${BASE_URL}/searchProducts/${key}`
       )
       if (searchproducts) {
         setproducts(searchproducts.data)
@@ -97,6 +50,7 @@ const Products = () => {
         <Typography variant='button' fontSize={22}>
           popular product of the day
         </Typography>
+
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
           <TextField

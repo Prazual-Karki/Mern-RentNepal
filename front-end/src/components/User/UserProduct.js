@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Shoe from '../Product/Shoe'
+import { BASE_URL } from '../helper'
 
 const UserProduct = (props) => {
   const [products, setproducts] = useState([])
@@ -16,16 +17,16 @@ const UserProduct = (props) => {
         cancelToken('Cleanup function called before request completion.')
       }
     }
-  }, [props.data])
+  }, [props.data, props.shoeId])
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/getProductsFromSpecificUser/${props.data._id}`,
+        `${BASE_URL}/getProductsFromSpecificUser/${props.data._id}`,
         {
           cancelToken: new axios.CancelToken((token) => (cancelToken = token)),
         }
       )
-      setproducts(response.data)
+      setproducts(response.data.filter((item) => item._id !== props.shoeId))
     } catch (error) {
       if (axios.isCancel(error)) {
         console.log('fetch cancelled for cleanup of product.js')

@@ -7,6 +7,7 @@ import { Link, Outlet } from 'react-router-dom'
 import AppsIcon from '@mui/icons-material/Apps'
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle'
 import CategoryIcon from '@mui/icons-material/Category'
+
 export default function ColorTabs() {
   const [value, setValue] = React.useState('one')
 
@@ -65,6 +66,14 @@ export default function ColorTabs() {
               label='All Products'
               LinkComponent={Link}
               to='/admin/allProducts'
+            />
+            <Tab
+              icon={<AppsIcon />}
+              iconPosition='start'
+              value='four'
+              label='Rental Details'
+              LinkComponent={Link}
+              to='/admin/rentalDetails'
             />
           </Tabs>
         </Grid>

@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { visuallyHidden } from '@mui/utils'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { BASE_URL } from '../helper'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -150,7 +151,7 @@ function EnhancedTableToolbar(props) {
   const { numSelected } = props
 
   const handleDelete = async (userIds) => {
-    await axios.delete('http://localhost:8080/deleteUsers', {
+    await axios.delete(`${BASE_URL}/deleteUsers`, {
       headers: {
         'Content-Type': 'application/json',
         authorization: `bearer ${localStorage.getItem('token')}`,
@@ -219,8 +220,8 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState('Full name')
   const [selected, setSelected] = React.useState([])
   const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [dense, setDense] = React.useState(true)
+  const [rowsPerPage, setRowsPerPage] = React.useState(7)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -267,25 +268,24 @@ export default function EnhancedTable() {
     setPage(0)
   }
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked)
-  }
+  // const handleChangeDense = (event) => {
+  //   setDense(event.target.checked)
+  // }
 
   const isSelected = (_id) => selected.indexOf(_id) !== -1
+  const [users, setusers] = useState([])
+  const rows = users
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
-
-  const [users, setusers] = useState([])
-  const rows = users
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source()
 
     axios
       .get(
-        'http://localhost:8080/getAllUsers',
+        `${BASE_URL}/getAllUsers`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,
@@ -392,10 +392,10 @@ export default function EnhancedTable() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Switch checked={dense} onChange={handleChangeDense} />}
             label='Decrease row space'
-          />
+          /> */}
         </>
       ) : (
         <Typography variant='button' textAlign='center'>

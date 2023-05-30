@@ -19,6 +19,7 @@ import {
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import { useNavigate } from 'react-router-dom'
 import noPhoto from './Product/photos/noPhoto.jpg'
+import { BASE_URL } from './helper'
 
 export default function ValidationTextFields() {
   const navigate = useNavigate()
@@ -68,10 +69,7 @@ export default function ValidationTextFields() {
         formData.append('photo', userDetails.photo)
         formData.append('gender', userDetails.gender)
 
-        const response = await axios.post(
-          'http://localhost:8080/signup',
-          formData
-        )
+        const response = await axios.post(`${BASE_URL}/signup`, formData)
         if (response.status === 200) {
           if (response.data.user && response.data.auth) {
             localStorage.setItem('users', JSON.stringify(response.data.user))
@@ -171,7 +169,7 @@ export default function ValidationTextFields() {
             >
               <input
                 hidden
-                accept='image/*'
+                accept='image/png, image/jpeg, image/jpg'
                 type='file'
                 onChange={(e) =>
                   setuserDetails({

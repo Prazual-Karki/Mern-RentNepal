@@ -3,8 +3,8 @@ import Shoe from '../Product/Shoe'
 import { Grid, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-const RecommendSection = () => {
+import { BASE_URL } from '../helper'
+const RecommendSection = (props) => {
   const [products, setproducts] = useState([])
   var cancelToken
   const userId = JSON.parse(localStorage.getItem('users'))._id
@@ -17,16 +17,16 @@ const RecommendSection = () => {
         cancelToken('Cleanup function called before request completion.')
       }
     }
-  }, [])
+  }, [props.shoeId])
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/getRecommendedProducts/${userId}`,
+        `${BASE_URL}/getRecommendedProducts/${userId}`,
         {
           cancelToken: new axios.CancelToken((token) => (cancelToken = token)),
         }
       )
-      setproducts(response.data)
+      setproducts(response.data.filter((item) => item._id !== props.shoeId))
     } catch (error) {
       if (axios.isCancel(error)) {
         console.log('fetch cancelled for cleanup of product.js')

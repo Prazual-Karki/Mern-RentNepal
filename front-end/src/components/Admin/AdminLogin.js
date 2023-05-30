@@ -9,6 +9,7 @@ import { Button, IconButton, Typography, Alert } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../helper'
 
 export default function InputWithIcon() {
   const [showPassword, setShowPassword] = React.useState(false)
@@ -30,7 +31,7 @@ export default function InputWithIcon() {
     setisSubmit(true)
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       try {
-        const response = await axios.post('http://localhost:8080/adminLogin', {
+        const response = await axios.post(`${BASE_URL}/adminLogin`, {
           email,
           password,
         })

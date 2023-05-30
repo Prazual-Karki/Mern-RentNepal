@@ -13,8 +13,10 @@ import SendIcon from '@mui/icons-material/Send'
 
 import { useState } from 'react'
 import { Typography } from '@mui/material'
+import { BASE_URL } from '../helper'
 
 export default function FormDialog({ data, checkBooking }) {
+  const auth = localStorage.getItem('users')
   const [open, setOpen] = React.useState(false)
   const [rentDays, setrentDays] = useState(1)
   const [loading, setLoading] = React.useState(false)
@@ -30,43 +32,49 @@ export default function FormDialog({ data, checkBooking }) {
   }
 
   const handleBooking = async () => {
-    setLoading(true)
-    const response = await axios.post(
-      'http://localhost:8080/sendEmailAndStoreRentalDetails',
-      {
-        userId: data.userId,
-        productId: data.productId,
-        receiverEmail: data.receiverEmail,
-        rentDays,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `bearer ${localStorage.getItem('token')}`,
+    if (rentDays >= 1) {
+      setLoading(true)
+      const response = await axios.post(
+        `${BASE_URL}/sendEmailAndStoreRentalDetails`,
+        {
+          userId: data.userId,
+          productId: data.productId,
+          receiverEmail: data.receiverEmail,
+          rentDays,
         },
-      }
-    )
-    const statusResponse = await axios.put(
-      `http://localhost:8080/changeProductStatus/${data.productId}`,
-      { status: 'taken' },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-
-          authorization: `bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    )
-
-    if (statusResponse.status === 200 && response.status === 200) {
-      setLoading(false)
-      setOpen(false)
-
-      checkBooking(true)
-
-      console.log(
-        'email sent success and stored in database and product booked'
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `bearer ${localStorage.getItem('token')}`,
+          },
+        }
       )
+      const statusResponse = await axios.put(
+        `${BASE_URL}/changeProductStatus/${data.productId}`,
+        {
+          status: `Booked by ${JSON.parse(auth).firstname} ${
+            JSON.parse(auth).lastname
+          }`,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+
+            authorization: `bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
+
+      if (statusResponse.status === 200 && response.status === 200) {
+        setLoading(false)
+        setOpen(false)
+
+        checkBooking(true)
+
+        console.log(
+          'email sent success and stored in database and product booked'
+        )
+      }
     }
   }
 
@@ -99,6 +107,7 @@ export default function FormDialog({ data, checkBooking }) {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <LoadingButton
+            disabled={rentDays < 1}
             size='small'
             onClick={handleBooking}
             endIcon={<SendIcon />}

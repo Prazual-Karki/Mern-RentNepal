@@ -22,11 +22,14 @@ const {
   addLikes,
   getProductsByType,
   getProductsFromSpecificUser,
+  handlePrice,
+  searchFilters,
 } = require('../controller/productController')
 
 const {
   sendEmailAndStoreRentalDetails,
   changeProductStatus,
+  getRentalHistoryOfSpecificUser,
 } = require('../controller/rentalDetailsController')
 
 const {
@@ -73,6 +76,7 @@ router.delete('/deleteUsers', verifyToken, deleteUsers)
 router.delete('/deleteProducts', verifyToken, deleteProducts)
 router.get('/getTotalUsersAndProducts', verifyToken, getTotalUsersAndProducts)
 router.get('/getRentalDetails', verifyToken, getRentalDetails)
+router.post('/search/filters', searchFilters)
 
 //for sending email to owner and store the rental details in database
 router.post(
@@ -84,5 +88,12 @@ router.put('/changeProductStatus/:id', verifyToken, changeProductStatus)
 
 //for recommending products to users
 router.get('/getRecommendedProducts/:id', getRecommendedProducts)
+router.get('/handlePrice', handlePrice)
+
+router.get(
+  '/getRentalHistoryOfSpecificUser/:id',
+  verifyToken,
+  getRentalHistoryOfSpecificUser
+)
 
 module.exports = router

@@ -34,7 +34,8 @@ const addProduct = async (request, response) => {
       }
     }
   } catch (error) {
-    console.log(error)
+    response.status(400).json(error)
+    // console.log(error)
   }
 }
 
@@ -112,7 +113,7 @@ const deleteSingleProduct = async (request, response) => {
 //get all products
 const getAllProducts = async (request, response) => {
   try {
-    const products = await Product.find({ status: 'available' })
+    const products = await Product.find()
     if (products.length > 0) {
       return response.status(200).json(products)
     } else {
@@ -123,6 +124,31 @@ const getAllProducts = async (request, response) => {
   }
 }
 
+const handlePrice = async (req, res, price) => {
+  try {
+    let products = await Product.find({
+      price: {
+        $gte: price[0],
+        $lte: price[1],
+      },
+    })
+      // .populate('category', '_id name')
+      // .populate('subs', '_id name')
+      // .populate('brand', '_id name')
+      .exec()
+    res.json(products)
+  } catch (err) {
+    console.log(err)
+  }
+}
+const searchFilters = async (req, res) => {
+  const { price } = req.body
+
+  if (price !== undefined) {
+    console.log('price', price)
+    await handlePrice(req, res, price)
+  }
+}
 const getProductsByType = async (request, response) => {
   try {
     const category = request.query.type
@@ -208,4 +234,6 @@ module.exports = {
   addLikes,
   getProductsByType,
   getProductsFromSpecificUser,
+  handlePrice,
+  searchFilters,
 }

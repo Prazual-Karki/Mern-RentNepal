@@ -8,10 +8,11 @@ import { Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import noPhoto from '../Product/photos/noPhoto.jpg'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import { BASE_URL } from '../helper'
 
 export default function MultiActionAreaCard(props) {
-  var photoName = props.data.photo.replace('public\\', '')
-  photoName = `http://localhost:8080/${photoName}`
+  var photoName = props.data.photo.replace('public/', '')
+  photoName = `${BASE_URL}/${photoName}`
 
   return (
     <Grid item xs={6} sm={6} md={4}>

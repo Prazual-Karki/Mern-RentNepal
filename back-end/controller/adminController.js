@@ -53,7 +53,10 @@ const getTotalUsersAndProducts = async (request, response) => {
   try {
     const totalUsers = await User.countDocuments({})
     const totalProducts = await Product.countDocuments({})
-    return response.status(200).json({ totalUsers, totalProducts })
+    const totalTransactions = await RentalDetails.countDocuments({})
+    return response
+      .status(200)
+      .json({ totalUsers, totalProducts, totalTransactions })
   } catch (error) {
     return response.status(400).json(error)
   }
@@ -133,14 +136,15 @@ const deleteProducts = async (request, response) => {
 }
 const getRentalDetails = async (request, response) => {
   try {
-    const rentalProducts = await RentalDetails.find()
+    const rentalProducts = await RentalDetails.find().populate('userId')
     if (rentalProducts.length > 0) {
       return response.status(200).json(rentalProducts)
     } else {
       return response.status(200).json('no rental transaction found')
     }
   } catch (error) {
-    return response.status(400).json(error)
+    // return response.status(400).json(error)
+    console.log(error)
   }
 }
 

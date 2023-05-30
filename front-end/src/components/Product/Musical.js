@@ -3,6 +3,7 @@ import Shoe from './Shoe'
 import { Grid, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { BASE_URL } from '../helper'
 
 const Products = () => {
   const [products, setproducts] = useState([])
@@ -20,7 +21,7 @@ const Products = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:8080/getProductsByType?type=music',
+        `${BASE_URL}/getProductsByType?type=music`,
         {
           cancelToken: new axios.CancelToken((token) => (cancelToken = token)),
         }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import noPhoto from '../Product/photos/noPhoto.jpg'
+import { BASE_URL } from '../helper'
 
 import {
   Button,
@@ -41,7 +42,7 @@ export default function ValidationTextFields() {
 
     axios
       .get(
-        `http://localhost:8080/getProductDetailById/${params.id}`,
+        `${BASE_URL}/getProductDetailById/${params.id}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,
@@ -55,8 +56,8 @@ export default function ValidationTextFields() {
         setproductInfo(res.data.productDetails)
 
         if (res.data.productDetails.photo) {
-          var photoName = res.data.productDetails.photo.replace('public\\', '')
-          photoName = `http://localhost:8080/${photoName}`
+          var photoName = res.data.productDetails.photo.replace('public/', '')
+          photoName = `${BASE_URL}/${photoName}`
           setprofilePic(photoName)
         }
       })
@@ -99,7 +100,7 @@ export default function ValidationTextFields() {
         formData.append('photo', imageFile)
 
         const response = await axios.put(
-          'http://localhost:8080/updateProductById/' + params.id,
+          `${BASE_URL}/updateProductById/` + params.id,
           formData,
           {
             headers: {

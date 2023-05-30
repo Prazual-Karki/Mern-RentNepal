@@ -6,17 +6,20 @@ import { Grid, Typography } from '@mui/material'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import ReceiptIcon from '@mui/icons-material/Receipt'
+import { BASE_URL } from '../helper'
 
 export default function Variants() {
   const [totalUsers, settotalUsers] = useState(0)
   const [totalProducts, settotalProducts] = useState(0)
+  const [totalTransactions, settotalTransactions] = useState(0)
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source()
 
     axios
       .get(
-        'http://localhost:8080/getTotalUsersAndProducts',
+        `${BASE_URL}/getTotalUsersAndProducts`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem('token')}`,
@@ -29,6 +32,7 @@ export default function Variants() {
       .then((res) => {
         settotalUsers(res.data.totalUsers)
         settotalProducts(res.data.totalProducts)
+        settotalTransactions(res.data.totalTransactions)
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
@@ -49,7 +53,7 @@ export default function Variants() {
   return (
     <Box px='5%' py='1%'>
       <Grid container spacing={3}>
-        <Grid item xs={6} md={6}>
+        <Grid item xs={6} md={4}>
           <Paper sx={paperStyle}>
             <PersonIcon sx={{ fontSize: 70 }} />
             <Typography variant='button' component='div'>
@@ -60,14 +64,25 @@ export default function Variants() {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={6} md={6}>
+        <Grid item xs={6} md={4}>
           <Paper sx={paperStyle}>
             <LibraryBooksIcon sx={{ fontSize: 70 }} />
             <Typography variant='button' component='div'>
-              uploaded shoes
+              uploaded product
             </Typography>
             <Typography fontSize={70} variant='caption' component='div'>
               {totalProducts}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={6} md={4}>
+          <Paper sx={paperStyle}>
+            <ReceiptIcon sx={{ fontSize: 70 }} />
+            <Typography variant='button' component='div'>
+              Rental Transactions
+            </Typography>
+            <Typography fontSize={70} variant='caption' component='div'>
+              {totalTransactions}
             </Typography>
           </Paper>
         </Grid>
